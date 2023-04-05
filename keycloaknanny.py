@@ -24,9 +24,7 @@ def enable_logging(
     _log.addHandler(handler)
 
 
-def random_name(
-    *, prefix: Optional[str] = None, length: int = 8, characters: Optional[str] = None
-) -> str:
+def random_name(*, prefix: Optional[str] = None, length: int = 8, characters: Optional[str] = None) -> str:
     characters = characters or (string.ascii_letters + string.digits)
     name = "".join(random.choices(characters, k=length))
     return f"{prefix}{name}"
@@ -52,6 +50,7 @@ class KeycloakNanny:
     Simple wrapper around the Keycloak admin REST API,
     to programmatically create realms, clients, users, ...
     """
+
     def __init__(
         self,
         root_url: str = "http://localhost:8080",
@@ -77,18 +76,14 @@ class KeycloakNanny:
             pass
         else:
             if self._tokens.refresh_expiry > now + valid_for:
-                _log.info(
-                    f"Getting new access token {self.admin!r} using refresh token grant."
-                )
+                _log.info(f"Getting new access token {self.admin!r} using refresh token grant.")
                 data = {
                     "client_id": "admin-cli",
                     "grant_type": "refresh_token",
                     "refresh_token": self._tokens.token_data["refresh_token"],
                 }
             else:
-                _log.info(
-                    f"Getting new access token {self.admin!r} using password grant."
-                )
+                _log.info(f"Getting new access token {self.admin!r} using password grant.")
                 data = {
                     "client_id": "admin-cli",
                     "grant_type": "password",
@@ -185,9 +180,7 @@ class KeycloakNanny:
         resp = self.post(f"/admin/realms/{realm}/clients", json=settings)
         location = resp.headers["Location"]
         info = self.get(location).json()
-        return KcResource(
-            type="client", id=info["id"], name=info["clientId"], info=info
-        )
+        return KcResource(type="client", id=info["id"], name=info["clientId"], info=info)
 
     def create_user(
         self,
@@ -220,7 +213,7 @@ class KeycloakNanny:
 if __name__ == "__main__":
     """
     First, run dummy Keycloak instance, e.g. like this:
-    
+
         docker run --rm \
             -p 8642:8080 \
             -e KEYCLOAK_ADMIN=admin \
