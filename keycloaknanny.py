@@ -225,7 +225,7 @@ if __name__ == "__main__":
     enable_logging()
     nanny = KeycloakNanny("http://localhost:8642")
 
-    realm = nanny.create_realm("playground")
+    realm = nanny.create_realm()
     print("Created realm", realm)
     nanny.set_default_realm(realm.name)
 
