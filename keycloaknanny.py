@@ -156,8 +156,9 @@ class KeycloakNanny:
         service_account=True,
         password_flow=True,
         device_flow=True,
+        client_id_prefix: str = "client-",
     ) -> KcResource:
-        client_id = client_id or random_name(prefix="client-", length=8)
+        client_id = client_id or random_name(prefix=client_id_prefix, length=8)
         realm = realm or self.default_realm
         settings = {
             "protocol": "openid-connect",
@@ -188,8 +189,9 @@ class KeycloakNanny:
         *,
         password: Optional[str] = None,
         realm: Optional[str] = None,
+        username_prefix: str = "user-",
     ) -> KcResource:
-        username = username or random_name(prefix="user-", length=8)
+        username = username or random_name(prefix=username_prefix, length=8)
         password = password or random_name(prefix="pwd-", length=4)
         realm = realm or self.default_realm
         settings = {
