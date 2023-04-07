@@ -1,10 +1,22 @@
 
 # Keycloak Nanny
 
+[![PyPI - Version](https://img.shields.io/pypi/v/keycloaknanny.svg)](https://pypi.org/project/keycloaknanny)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/keycloaknanny.svg)](https://pypi.org/project/keycloaknanny)
+
+
 Simple Python wrapper around the Keycloak admin REST API,
 to programmatically create realms, clients, users, ...
 
-Intended to be used on test/toy/dummy Keycloak instances,
+## Installation
+
+```console
+pip install keycloaknanny
+```
+
+## Usage
+
+Keycloak nanny is intended to be used on test/toy/dummy Keycloak instances,
 e.g. running locally in docker:
 
 ```bash
@@ -32,3 +44,7 @@ user = nanny.create_user()
 print("Created user", user)
 
 ```
+
+## License
+
+`keycloak-nanny` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
