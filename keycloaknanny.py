@@ -212,7 +212,7 @@ class KeycloakNanny:
         return KcResource(type="user", id=info["id"], name=info["username"], info=info)
 
 
-if __name__ == "__main__":
+def demo():
     """
     First, run dummy Keycloak instance, e.g. like this:
 
@@ -234,3 +234,7 @@ if __name__ == "__main__":
 
     user = nanny.create_user()
     print("Created user", user)
+
+
+if __name__ == "__main__":
+    demo()
