@@ -1,9 +1,9 @@
+import dataclasses
+import logging
 import random
 import string
-from typing import Optional, Set, TextIO
-import logging
-import dataclasses
 import time
+from typing import Optional, Set, TextIO
 
 import requests
 
@@ -93,6 +93,7 @@ class KeycloakNanny:
             resp = requests.post(
                 self._get_url("/realms/master/protocol/openid-connect/token"),
                 data=data,
+                timeout=10,
             )
             resp.raise_for_status()
             token_data = resp.json()
@@ -110,27 +111,26 @@ class KeycloakNanny:
             "Authorization": f"Bearer {access_token}",
         }
 
-    def request(self, method: str, path: str, *args, **kwargs):
+    def request(self, method: str, path: str, **kwargs):
         url = self._get_url(path)
         _log.info(f"Doing {method} {url}")
         resp = requests.request(
             method=method,
             url=url,
-            *args,
             headers=self._get_auth_headers(),
             **kwargs,
         )
         resp.raise_for_status()
         return resp
 
-    def get(self, path: str, *args, **kwargs):
-        return self.request(method="GET", path=path, *args, **kwargs)
+    def get(self, path: str, **kwargs):
+        return self.request(method="GET", path=path, **kwargs)
 
-    def post(self, path: str, *args, **kwargs):
-        return self.request(method="POST", path=path, *args, **kwargs)
+    def post(self, path: str, **kwargs):
+        return self.request(method="POST", path=path, **kwargs)
 
     def get_realms(self) -> Set[str]:
-        return set(r["realm"] for r in self.get("/admin/realms").json())
+        return {r["realm"] for r in self.get("/admin/realms").json()}
 
     def create_realm(self, realm: Optional[str] = None) -> KcResource:
         realm = realm or random_name(prefix="realm-", length=8)
